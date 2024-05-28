@@ -85,7 +85,7 @@ function SignUp() {
               />
             </div>
             <div>
-              <Label value="Your username" />
+              <Label value="Your password" />
               <TextInput
                 type="password"
                 placeholder="Password"
