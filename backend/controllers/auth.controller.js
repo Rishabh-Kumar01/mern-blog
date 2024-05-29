@@ -69,7 +69,10 @@ export const signin = async (req, res, next) => {
       return next(errorHandler(400, "Invalid credentials"));
     }
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: validUser._id, isAdmin: validUser.isAdmin },
+      process.env.JWT_SECRET
+    );
 
     // Destructure to exclude the password from the user object
     const { password: pass, ...restUser } = validUser._doc;
@@ -89,16 +92,14 @@ export const googleSignIn = async (req, res, next) => {
   const { email, name, googlePhotoUrl } = req.body;
 
   try {
-    const user = await User.findOne({ email });
-
-    let newUser = {};
+    let user = await User.findOne({ email });
 
     if (!user) {
       const generatedPassword = Math.random().toString(36).slice(-8);
 
       const hashedPassword = bcryptjs.hashSync(generatedPassword, 12);
 
-      let newUser = new User({
+      user = new User({
         username:
           name.toLowerCase().split(" ").join("") +
           Math.random().toString(9).slice(-4),
@@ -107,14 +108,17 @@ export const googleSignIn = async (req, res, next) => {
         profilePicture: googlePhotoUrl,
       });
 
-      await newUser.save();
+      await user.save();
     }
 
     const token = jwt.sign(
-      { id: user ? user._id : newUser._id },
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
       process.env.JWT_SECRET
     );
-    const { password, ...rest } = user ? user._doc : newUser._doc;
+    const { password: pass, ...rest } = user._doc;
     res
       .status(200)
       .cookie("access_token", token, {
