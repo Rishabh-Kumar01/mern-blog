@@ -65,7 +65,7 @@ function CreatePost() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/post/create", {
+      const response = await fetch("/api/posts/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -114,6 +114,7 @@ function CreatePost() {
             <option value="javascript">Javascript</option>
             <option value="reactjs">React.js</option>
             <option value="nextjs">Next.js</option>
+            <option value="ai">AI</option>
           </Select>
         </div>
         <div className="flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3">
