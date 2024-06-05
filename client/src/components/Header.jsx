@@ -64,7 +64,7 @@ function Header() {
             arrowIcon={false}
             inline
             label={
-              <Avatar alt="user" img={currentUser.profilePicture} rounded />
+              <Avatar alt="user" img={currentUser.profilePicture} rounded className="object-cover" />
             }
           >
             <Dropdown.Header>
